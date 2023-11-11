@@ -1,0 +1,122 @@
+<!-- Trabajo realizado por: Diego Merentiel(239689)-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/estilos.css">
+    <script src="js/clases.js"></script>
+    <script src="js/funciones.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Regalos Especiales</title>
+</head>
+<body>
+    <header>
+        <h1> Regalos especiales</h1>
+        <h2> Sitio desarrollado por <a href="https://www.linkedin.com/in/diego-merentiel/" target="_blank">Diego
+                Merentiel(Nro 239689)</a></h2>
+    </header>
+    <nav>
+        <a href="#informes">Informes</a>
+        <a href="#categorias">Gestión de categorías</a>
+        <a href="#experiencias">Gestión de experiencias</a>
+    </nav>
+    <div>
+        <div id="idComprarExperiencia">
+            <section id="idComboCategorias">
+                <h2><label for="idCategoria">Categoría</label></h2>
+                <select id="idCategoria"></select>
+                <h2><label for="idCantidad">Cantidad de personas</label></h2>
+                <select id="idCantidad">
+                    <option> Todos</option>
+                    <option> 1 persona</option>
+                    <option> 2 personas</option>
+                    <option> Más de 2 personas</option>
+                </select>
+                <h2> <label for="idOrden">Orden de precio</label></h2>
+                <select id="idOrden">
+                    <option> Creciente</option>
+                    <option> Decreciente</option>
+                </select>
+            </section>
+            <aside id="idExperiencias">
+                <h2> Experiencias</h2>
+                <p> Sin datos</p>
+                <div>
+                    <h2> ¡Comprar!</h2>
+                    <p> Experiencia: Sin datos</p>
+                </div>
+                <form>
+                    <label for="idNombreComprador"> Nombre Comprador:</label>
+                    <input type="text" id="idNombreComprador">
+                    <label for="idEmailComprador"> Mail:</label>
+                    <input type="email" id="idEmailComprador">
+                    <input type="button" value="Comprar" disabled>
+                </form>
+            </aside>
+        </div>
+        <article id="idInformes">
+            <a id="informes">
+                <h2>Informes</h2>
+            </a>
+            <p> Monto de la experiencia/s más cara</p>
+            <p> Sin datos</p>
+            <p>Experiencia/s más veces comprada</p>
+            <details>
+                <summary>Detalle de compras de la categoria seleccionada</summary>
+                <p> Compras realizadas:</p>
+                <ul>
+                    <li> Sin datos</li>
+                </ul>
+            </details>
+        </article>
+        <article id="idGestionCategorias">
+            <a id="categorias">
+                <h2> Gestión de categorías</h2>
+            </a>
+            <form id="idCrearCategorias">
+                <label for="idNombreCategoria"> Nombre de la categoría:</label>
+                <input type="text" id="idNombreCategoria" required>
+                <label for="idDetallesCategoria"> Detalles de la categoría:</label>
+                <input type="text" id="idDetallesCategoria">
+                <input type="button"  id="idBotonCrearCategoria" value="Agregar">
+            </form>
+            <p>
+                <label for="idCategoriaABorrar">Seleccionar categoría a borrar:</label>
+                <select id="idCategoriaABorrar"></select>
+                <input type="button" id="idBotonEliminarCategoria" value="Eliminar">
+            </p>
+        </article>
+        <article id="idGestionExperiencias">
+            <a id="experiencias">
+                <h2> Gestión de experiencias</h2>
+            </a>
+            <form>
+                <label for="idTituloExperiencia"> Título de la experiencia:</label>
+                <input type="text" id="idTituloExperiencia">
+                <label for="idDescripcionExperiencia"> Descripción de la experiencia:</label>
+                <input type="text" id="idDescripcionExperiencia">
+                <label for="idPrecioExperiencia"> Precio:</label>
+                <input type="number" id="idPrecioExperiencia">
+                <label for="idCantidadExperiencia"> Cantidad:</label>
+                <select id="idCantidadExperiencia">
+                    <option> 1 persona</option>
+                    <option> 2 personas</option>
+                    <option> Más de 2 personas</option>
+                </select>
+                <label for="idCategoriaExperiencia"> Categoria:</label>
+                <select id="idCategoriaExperiencia"></select>
+                <input type="button" id="idAgregarExperiencia" value="Agregar">
+            </form>
+            <p>
+                <label for="idExperienciaABorrar"> Seleccionar experiencia a borrar:</label>
+                <select id="idExperienciaABorrar"></select>
+                <input type="button" value="Eliminar">
+            </p>
+        </article>
+    </div>
+    <footer>
+        <p>Sitio Desarrollado por Diego Merentiel(239689) - Universidad ORT Uruguay</p>
+    </footer>
+</body>
+
+</html>
