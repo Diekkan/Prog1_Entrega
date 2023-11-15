@@ -5,7 +5,14 @@ class Sistema {
         {nombre: "Aire Libre", detalles: "Actividades afuera"},
         {nombre: "Fiestas", detalles: "Baile"},
     ];
-    experiencias = [];
+    experiencias = [
+        {titulo: "Asado en familia", descripcion: "Legumbres incluidas",
+         precio: 1500, cantidad: "Más de 2 personas", categoria: {nombre: "Gastronomía", detalles: "Cocina y demás"}},
+        {titulo: "Hamburgueseada", descripcion: "Aderezos y tomates",
+         precio: 900, cantidad: "Más de 2 personas", categoria: {nombre: "Gastronomía", detalles: "Cocina y demás"}},
+        {titulo: "Bresh", cantidad: "1 persona", descripcion: "Fiesta de pop y baile",
+         precio: 1100, categoria: {nombre: "Fiestas", detalles: "Baile"}},
+    ];
     compras = [];
 
     cargarCategoria(categoria) {
@@ -23,6 +30,10 @@ class Sistema {
 
     cargarExperiencia(experiencia) {
         this.experiencias.push(experiencia);
+    }
+
+    removerExperiencia(indice) {
+        this.experiencias.splice(indice, 1);
     }
 
 }
@@ -48,7 +59,7 @@ class Experiencia {
     titulo = "";
     descripcion = "";
     precio = 0;
-    cantidad = 0;
+    cantidad = "";
     categoria = {};
 
     constructor(titulo, descripcion, precio, cantidad, categoria) {
