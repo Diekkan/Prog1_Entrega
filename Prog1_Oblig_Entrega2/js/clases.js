@@ -5,6 +5,15 @@ class Sistema {
         {nombre: "Aire Libre", detalles: "Actividades afuera"},
         {nombre: "Fiestas", detalles: "Baile"},
     ];
+
+    experiencias = [];
+    
+    compras = [];
+
+    cargarCategoria(categoria) {
+        this.categorias.push(categoria);
+    }
+    /*
     experiencias = [
         {titulo: "Asado en familia", descripcion: "Legumbres incluidas",
          precio: 1500, cantidad: "Más de 2 personas", categoria: {nombre: "Gastronomía", detalles: "Cocina y demás"}},
@@ -13,12 +22,8 @@ class Sistema {
         {titulo: "Bresh", cantidad: "1 persona", descripcion: "Fiesta de pop y baile",
          precio: 1100, categoria: {nombre: "Fiestas", detalles: "Baile"}},
     ];
-    compras = [];
 
-    cargarCategoria(categoria) {
-        this.categorias.push(categoria);
-    }
-    /*removerCategoria(nombreCategoria) {
+    removerCategoria(nombreCategoria) {
         let indiceAEliminar = this.categorias.findIndex(categoria => categoria.nombre === nombreCategoria);
         if (indiceAEliminar !== -1) {
             this.categorias.splice(indiceAEliminar, 1);

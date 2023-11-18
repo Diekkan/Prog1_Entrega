@@ -2,20 +2,22 @@
 window.addEventListener("load", inicio);
 let sistema = new Sistema();
 let cantidadPersonas = ["1 persona", "2 personas", "Más de 2 personas"]
+let experienciaSeleccionada = {};
+let contenedorExperienciaSeleccionada = {};
 
 function inicio() {
     actualizarCategorias();
     actualizarExperiencias();
-    document.getElementById("idBotonCrearCategoria").addEventListener("click", agregarCategoria);
-    document.getElementById("idBotonEliminarCategoria").addEventListener("click", eliminarCategoria);
-    document.getElementById("idAgregarExperiencia").addEventListener("click", agregarExperiencia);
-    document.getElementById("idBotonEliminarExperiencia").addEventListener("click", eliminarExperiencia);
+    document.getElementById("idBotonAgregarCategoria").addEventListener("click", agregarCategoria);
+    document.getElementById("idBotonBajaCategoria").addEventListener("click", eliminarCategoria);
+    document.getElementById("idBotonAltaExperiencia").addEventListener("click", agregarExperiencia);
+    document.getElementById("idBotonBajaExperiencia").addEventListener("click", eliminarExperiencia);
 }
 
 // Manejo de categorías
 
 function agregarCategoria() {
-    if(document.getElementById("idCrearCategorias").reportValidity()){
+    if(document.getElementById("idFormCategoria").reportValidity()){
         let nombre = document.getElementById("idNombreCategoria").value;
         let detalles = document.getElementById("idDetallesCategoria").value;
         let categoria = new Categoria(nombre, detalles);
@@ -25,13 +27,13 @@ function agregarCategoria() {
 }
 
 function eliminarCategoria(){
-    sistema.removerCategoria(document.getElementById("idCategoriaABorrar").selectedIndex);
+    sistema.removerCategoria(document.getElementById("idComboCategoriasAbajo").selectedIndex);
     actualizarCategorias();
 }
 
 function actualizarCategorias() {
-    let seleccionarCategorias = document.getElementById("idCategoria");
-    let borrarCategorias = document.getElementById("idCategoriaABorrar");
+    let seleccionarCategorias = document.getElementById("idComboCategoriasIzquierda");
+    let borrarCategorias = document.getElementById("idComboCategoriasAbajo");
     let categoriasDeExperiencias = document.getElementById("idCategoriaExperiencia");
 
     seleccionarCategorias.innerHTML = "";
@@ -54,7 +56,7 @@ function agregarExperiencia() {
     let titulo = document.getElementById("idTituloExperiencia").value;
     let descripcion = document.getElementById("idDescripcionExperiencia").value;
     let precio = document.getElementById("idPrecioExperiencia").value;
-    let cantidad = document.getElementById("idCantidadExperiencia").selectedIndex;
+    let cantidad = document.getElementById("idCantidadPersonasExperiencia").selectedIndex;
     let categoria = document.getElementById("idCategoriaExperiencia").selectedIndex;
 
     let experiencia = new Experiencia(titulo, descripcion, precio, cantidadPersonas[cantidad], categoria);
@@ -63,14 +65,13 @@ function agregarExperiencia() {
 }
 
 function eliminarExperiencia() {
-    sistema.removerExperiencia(document.getElementById("idExperienciaABorrar").selectedIndex);
+    sistema.removerExperiencia(document.getElementById("idComboBajaExperiencia").selectedIndex);
     actualizarExperiencias();
 }
 
 function actualizarExperiencias(){
-    console.log(sistema.experiencias);
-    let listaExperiencias = document.getElementById("idListaExperiencias");
-    let experienciaABorrar = document.getElementById("idExperienciaABorrar");
+    let listaExperiencias = document.getElementById("idTabla");
+    let experienciaABorrar = document.getElementById("idComboBajaExperiencia");
     
     listaExperiencias.innerHTML = "";
 
@@ -109,28 +110,32 @@ function actualizarExperiencias(){
     */
     let nuevaFila = document.createElement("tr");;
 
-    for (let i = 1; i <= sistema.experiencias.length; i++) {
-        let elementoExperiencia = document.createElement("option");
-        elementoExperiencia.innerHTML = sistema.experiencias[i].titulo;
-        experienciaABorrar.appendChild(elementoExperiencia);
-    
-        let experienciaContenedor = crearElementoExperiencia(sistema.experiencias[i]);
-    
-        if (i % 2 === 0) {
-            nuevaFila = document.createElement("tr");
-        }
-    
-        nuevaFila.appendChild(experienciaContenedor);
-    
-        if (i % 2 !== 0 || i === sistema.experiencias.length) {
-            listaExperiencias.appendChild(nuevaFila);
-        }
+
+
+// Iterate through sistema.experiencias
+for (let i = 0; i < sistema.experiencias.length; i += 2) {
+    let nuevaFila = document.createElement("tr");
+
+    let experienciaContenedor1 = crearElementoExperiencia(sistema.experiencias[i]);
+    experienciaContenedor1.addEventListener("click", function() {
+        seleccionarExperiencia(experienciaContenedor1, sistema.experiencias[i]);
+    });
+    nuevaFila.appendChild(experienciaContenedor1);
+    if (i + 1 < sistema.experiencias.length) {
+        let experienciaContenedor2 = crearElementoExperiencia(sistema.experiencias[i + 1]);
+        experienciaContenedor2.addEventListener("click", function() {
+            seleccionarExperiencia(experienciaContenedor2, sistema.experiencias[i + 1]);
+        });
+        nuevaFila.appendChild(experienciaContenedor2);
     }
+    let elementoExperiencia = document.createElement("option");
+    elementoExperiencia.innerHTML = sistema.experiencias[i].titulo;
+    experienciaABorrar.appendChild(elementoExperiencia);
     
-    if (sistema.experiencias.length % 2 === 0) {
-        listaExperiencias.appendChild(nuevaFila);
-    }
-    
+    listaExperiencias.appendChild(nuevaFila);
+}
+
+
 }
 
 function crearElementoExperiencia(experiencia) {
@@ -160,7 +165,7 @@ function crearElementoExperiencia(experiencia) {
     titulo.className = "experienciaTitulo";
     descripcion.innerHTML = experiencia.descripcion;
     descripcion.className = "experienciaDescripcion"
-    precio.innerHTML = experiencia.precio;
+    precio.innerHTML = `$${experiencia.precio}`;
     precio.className = "experienciaPrecio";
 
     nuevoElemento.appendChild(titulo);
@@ -169,4 +174,35 @@ function crearElementoExperiencia(experiencia) {
     nuevoElemento.appendChild(icono);
     
     return nuevoElemento;
+}
+
+function seleccionarExperiencia(experienciaContenedor, experiencia){
+    if(experienciaContenedor.classList.contains("selected")){
+        experienciaContenedor.classList.remove("selected");
+        contenedorExperienciaSeleccionada = {};
+        experienciaSeleccionada = {};
+    } else {
+        if(experienciaContenedor !== contenedorExperienciaSeleccionada){
+            console.log("es diferente!")
+            console.log(Object.keys(contenedorExperienciaSeleccionada).length > 0)
+            if(Object.keys(contenedorExperienciaSeleccionada).length > 0){
+                contenedorExperienciaSeleccionada.classList.remove("selected");
+                console.log(contenedorExperienciaSeleccionada);
+            }
+        }
+        experienciaContenedor.classList.add("selected"); 
+        experienciaSeleccionada = experiencia;
+        contenedorExperienciaSeleccionada = experienciaContenedor;
+    }
+    actualizarExperienciaSeleccionada();
+}
+
+function actualizarExperienciaSeleccionada(){
+    let experienciaInfo = document.getElementById("idCualExperiencia");
+    
+    if(Object.keys(experienciaInfo).length > 0){
+        experienciaInfo.innerHTML += ` ${experienciaSeleccionada.titulo}`;
+    } else {
+        experienciaInfo.innerHTML = "Experiencias:";
+    }
 }
