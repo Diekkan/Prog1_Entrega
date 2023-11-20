@@ -62,9 +62,6 @@ article{padding:3px;
 
 /* experiencia */
 
-.tituloExperiencia{
-
-}
-.descripcionExperiencia{
-
+.experienciaDescripcion {
+font-style: italic;
 }

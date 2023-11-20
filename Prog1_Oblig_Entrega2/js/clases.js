@@ -1,34 +1,14 @@
+// Trabajo realizado por Diego Merentiel (239689)
+
 class Sistema {
 
-    categorias = [
-        {nombre: "Gastronomía", detalles: "Cocina y demás"},
-        {nombre: "Aire Libre", detalles: "Actividades afuera"},
-        {nombre: "Fiestas", detalles: "Baile"},
-    ];
-
+    categorias = [];
     experiencias = [];
-    
     compras = [];
 
     cargarCategoria(categoria) {
         this.categorias.push(categoria);
     }
-    /*
-    experiencias = [
-        {titulo: "Asado en familia", descripcion: "Legumbres incluidas",
-         precio: 1500, cantidad: "Más de 2 personas", categoria: {nombre: "Gastronomía", detalles: "Cocina y demás"}},
-        {titulo: "Hamburgueseada", descripcion: "Aderezos y tomates",
-         precio: 900, cantidad: "Más de 2 personas", categoria: {nombre: "Gastronomía", detalles: "Cocina y demás"}},
-        {titulo: "Bresh", cantidad: "1 persona", descripcion: "Fiesta de pop y baile",
-         precio: 1100, categoria: {nombre: "Fiestas", detalles: "Baile"}},
-    ];
-
-    removerCategoria(nombreCategoria) {
-        let indiceAEliminar = this.categorias.findIndex(categoria => categoria.nombre === nombreCategoria);
-        if (indiceAEliminar !== -1) {
-            this.categorias.splice(indiceAEliminar, 1);
-        }
-    }*/
     removerCategoria(indice) {
         this.categorias.splice(indice, 1);
     }
@@ -40,7 +20,9 @@ class Sistema {
     removerExperiencia(indice) {
         this.experiencias.splice(indice, 1);
     }
-
+    cargarCompra(compra){
+        this.compras.push(compra);
+    }
 }
 
 class Categoria {
