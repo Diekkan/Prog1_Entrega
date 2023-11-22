@@ -6,6 +6,10 @@ class Sistema {
     experiencias = [];
     compras = [];
 
+    // categorias
+    obtenerCategorias(){
+        return this.categorias;
+    }
     cargarCategoria(categoria) {
         this.categorias.push(categoria);
     }
@@ -13,6 +17,10 @@ class Sistema {
         this.categorias.splice(indice, 1);
     }
 
+    //experiencias
+    obtenerExperiencias(){
+        return this.experiencias;
+    }
     cargarExperiencia(experiencia) {
         this.experiencias.push(experiencia);
     }
@@ -20,9 +28,15 @@ class Sistema {
     removerExperiencia(indice) {
         this.experiencias.splice(indice, 1);
     }
+
+    //compras
+    obtenerCompras(){
+        return this.compras;
+    }
     cargarCompra(compra){
         this.compras.push(compra);
     }
+
 }
 
 class Categoria {
@@ -34,11 +48,6 @@ class Categoria {
         this.nombre = nombre;
         this.detalles = detalles;
     }
-
-    toString() {
-        return `${this.nombre}${this.detalles}`
-    }
-
 }
 
 class Experiencia {
@@ -57,6 +66,14 @@ class Experiencia {
         this.categoria = categoria;
     }
 
+    toString(){
+        return `Experiencia: ${this.titulo}`;
+    }
+
+    obtenerCategoria(){
+        return this.categoria;
+    }
+
 }
 
 class Compra {
@@ -64,11 +81,25 @@ class Compra {
     nombreComprador = "";
     mail = "";
     experiencia = {};
+    fecha;
+    hora;
 
     constructor(nombreComprador, mail, experiencia) {
+        let fechaCreado = new Date();
+
         this.nombreComprador = nombreComprador;
         this.mail = mail;
         this.experiencia = experiencia;
+        this.fecha = `${fechaCreado.getDate()}/${fechaCreado.getMonth() + 1}/${fechaCreado.getFullYear()}`;
+        this.hora = `${fechaCreado.getHours()}:${fechaCreado.getMinutes()}`;
+    }
+
+    toString(){
+        return `Nombre:${this.nombreComprador} Mail:${this.mail} Fecha:${this.fecha} Hora:${this.hora}`;
+    }
+
+    obtenerExperiencia(){
+        return this.experiencia;
     }
 
 }

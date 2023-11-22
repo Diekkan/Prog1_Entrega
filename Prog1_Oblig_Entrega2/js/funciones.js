@@ -9,6 +9,7 @@ let experienciaSeleccionada = {};
 let contenedorExperienciaSeleccionada = {};
 
 function inicio() {
+	actualizarExperiencias();
 	document.getElementById("idComboCategoriasIzquierda").addEventListener("change", function () {
 		filtrar();
 		filtrarCompras();
@@ -36,48 +37,46 @@ function filtrar() {
 	let cantidadPersonas = document.getElementById("idCantidadPersonasCategoria").value;
 	let orden = document.getElementById("idOrdenPrecio").value;
 
-	if (categoriaSeleccionada == "Todos") {
-
-	} else {
-		for (let experiencia of sistema.experiencias) {
-			if (experiencia.categoria.nombre === categoriaSeleccionada) {
-				if (cantidadPersonas === "todos") {
-					experienciasAMostrar.push(experiencia);
+	for (let experiencia of sistema.obtenerExperiencias()) {
+		if (experiencia.obtenerCategoria().nombre === categoriaSeleccionada) {
+			if (cantidadPersonas === "todos") {
+				experienciasAMostrar.push(experiencia);
+			}
+			else {
+				if (cantidadPersonas === "uno") {
+					if (experiencia.cantidad === "uno") {
+						experienciasAMostrar.push(experiencia);
+					}
 				}
-				else {
-					if (cantidadPersonas === "uno") {
-						if (experiencia.cantidad === "uno") {
-							experienciasAMostrar.push(experiencia);
-						}
+				if (cantidadPersonas === "dos") {
+					if (experiencia.cantidad === "dos") {
+						experienciasAMostrar.push(experiencia);
 					}
-					if (cantidadPersonas === "dos") {
-						if (experiencia.cantidad === "dos") {
-							experienciasAMostrar.push(experiencia);
-						}
-					}
-					if (cantidadPersonas === "varios") {
-						if (experiencia.cantidad === "varios") {
-							experienciasAMostrar.push(experiencia);
-						}
+				}
+				if (cantidadPersonas === "varias") {
+					if (experiencia.cantidad === "varias") {
+						experienciasAMostrar.push(experiencia);
 					}
 				}
 			}
 		}
-		if (orden == "1") {
-			experienciasAMostrar.sort((a, b) => a.precio - b.precio);
-		} else {
-			experienciasAMostrar.sort((a, b) => b.precio - a.precio);
+	}
+	if (orden == "1") {
+		experienciasAMostrar.sort((a, b) => a.precio - b.precio);
+	} else {
+		experienciasAMostrar.sort((a, b) => b.precio - a.precio);
 
-		}
 	}
 	actualizarExperiencias()
 }
 
 function agregarCategoria() {
+
 	if (document.getElementById("idFormCategoria").reportValidity()) {
+
 		let nombre = document.getElementById("idNombreCategoria").value;
 		let flag = false;
-		for (let categoria of sistema.categorias) {
+		for (let categoria of sistema.obtenerCategorias()) {
 			if (categoria.nombre === nombre) {
 				flag = true;
 			}
@@ -93,10 +92,12 @@ function agregarCategoria() {
 }
 
 function eliminarCategoria() {
-	let categoria = sistema.categorias[document.getElementById("idComboCategoriasAbajo").selectedIndex];
+
+	let categoria = sistema.obtenerCategorias()[document.getElementById("idComboCategoriasAbajo").selectedIndex];
 	let flag = false;
-	for (let experiencia of sistema.experiencias) {
-		if (experiencia.categoria.nombre === categoria.nombre) {
+	for (let experiencia of sistema.obtenerExperiencias()) {
+
+		if (experiencia.obtenerCategoria().nombre === categoria.nombre) {
 			flag = true;
 		}
 	}
@@ -110,6 +111,7 @@ function eliminarCategoria() {
 }
 
 function actualizarCategorias() {
+
 	let seleccionarCategorias = document.getElementById(
 		"idComboCategoriasIzquierda"
 	);
@@ -122,7 +124,7 @@ function actualizarCategorias() {
 	borrarCategorias.innerHTML = "";
 	categoriasDeExperiencias.innerHTML = "";
 
-	for (let categoria of sistema.categorias) {
+	for (let categoria of sistema.obtenerCategorias()) {
 		let elementoCategoria = document.createElement("option");
 		elementoCategoria.innerHTML = categoria.nombre;
 
@@ -135,10 +137,12 @@ function actualizarCategorias() {
 // Manejo de experiencias
 
 function agregarExperiencia() {
+
 	if (document.getElementById("idFormExperiencia").reportValidity()) {
+
 		let titulo = document.getElementById("idTituloExperiencia").value;
 		let flag = false;
-		for (let experiencia of sistema.experiencias) {
+		for (let experiencia of sistema.obtenerExperiencias()) {
 			if (experiencia.titulo === titulo) {
 				flag = true;
 			}
@@ -151,6 +155,9 @@ function agregarExperiencia() {
 		let cantidad = document.getElementById("idCantidadPersonasExperiencia").value;
 		let categoria = document.getElementById("idCategoriaExperiencia").value;
 
+		if(categoria == ""){
+			return alert("Debes seleccionar una categoría válida.");
+		}
 		categoria = { nombre: categoria };
 		let experiencia = new Experiencia(
 			titulo,
@@ -167,9 +174,10 @@ function agregarExperiencia() {
 }
 
 function eliminarExperiencia() {
-	let experiencia = sistema.experiencias[document.getElementById("idComboBajaExperiencia").selectedIndex];
+
+	let experiencia = sistema.obtenerExperiencias()[document.getElementById("idComboBajaExperiencia").selectedIndex];
 	let flag = false;
-	for (let compra of sistema.compras) {
+	for (let compra of sistema.obtenerCompras()) {
 		if (compra.experiencia.titulo === experiencia.titulo) {
 			flag = true;
 		}
@@ -183,10 +191,11 @@ function eliminarExperiencia() {
 }
 
 function calcularExpMasCara() {
+
 	let dato = document.getElementById("idExperienciaMasCara");
-	if (sistema.experiencias.length > 0) {
+	if (sistema.obtenerExperiencias().length > 0) {
 		let valor = Number.MIN_SAFE_INTEGER;
-		for (let experiencia of sistema.experiencias) {
+		for (let experiencia of sistema.obtenerExperiencias()) {
 			if (experiencia.precio > valor) {
 				valor = experiencia.precio;
 			}
@@ -208,7 +217,7 @@ function actualizarExperiencias() {
 
 	if (experienciasAMostrar.length === 0) {
 		let fila = document.createElement("tr");
-		let sinExperiencias = document.createElement("td");
+		let sinExperiencias = document.createElement("p");
 		sinExperiencias.innerHTML = "Sin datos.";
 		fila.appendChild(sinExperiencias);
 		listaExperiencias.appendChild(fila);
@@ -229,11 +238,14 @@ function actualizarExperiencias() {
 				seleccionarExperiencia(experienciaContenedor2, experienciasAMostrar[i + 1]);
 			});
 			nuevaFila.appendChild(experienciaContenedor2);
+		} else {
+			experienciaContenedor1.colSpan = "2";
 		}
 
 		listaExperiencias.appendChild(nuevaFila);
 	}
-	for (let experiencia of sistema.experiencias) {
+	for (let experiencia of sistema.obtenerExperiencias()) {
+
 		let elementoExperiencia = document.createElement("option");
 		elementoExperiencia.innerHTML = experiencia.titulo;
 		experienciaABorrar.appendChild(elementoExperiencia);
@@ -242,6 +254,7 @@ function actualizarExperiencias() {
 }
 
 function crearElementoExperiencia(experiencia) {
+
 	let nuevoElemento = document.createElement("td");
 	nuevoElemento.className = "contenedorExperiencia";
 
@@ -260,6 +273,9 @@ function crearElementoExperiencia(experiencia) {
 			icono.src = "./img/muchos.png";
 		}
 	}
+	if(experiencia == experienciaSeleccionada){
+		nuevoElemento.className = "selected";
+	}
 
 	titulo.innerHTML = experiencia.titulo;
 	titulo.className = "experienciaTitulo";
@@ -277,6 +293,7 @@ function crearElementoExperiencia(experiencia) {
 }
 
 function seleccionarExperiencia(experienciaContenedor, experiencia) {
+
 	let listaExperiencias = document.getElementById("idTabla").childNodes;
 	if (experiencia === experienciaSeleccionada) {
 		contenedorExperienciaSeleccionada = {};
@@ -297,6 +314,7 @@ function seleccionarExperiencia(experienciaContenedor, experiencia) {
 }
 
 function actualizarExperienciaSeleccionada(experienciaSeleccionada) {
+
 	let experienciaInfo = document.getElementById("idCualExperiencia");
 	if (Object.keys(experienciaSeleccionada).length > 0) {
 		experienciaInfo.innerHTML = `Experiencia: ${experienciaSeleccionada.titulo}`;
@@ -310,8 +328,8 @@ function actualizarExperienciaSeleccionada(experienciaSeleccionada) {
 function calcularExpMasComprada() {
 	let contadorExp = {};
 
-	if (sistema.compras) {
-		for (let compra of sistema.compras) {
+	if (sistema.obtenerCompras()) {
+		for (let compra of sistema.obtenerCompras()) {
 			let nombreExp = compra.experiencia.titulo;
 			if (!contadorExp[nombreExp]) {
 				contadorExp[nombreExp] = 1;
@@ -338,24 +356,26 @@ function calcularExpMasComprada() {
 	}
 }
 function comprarExperiencia() {
+
 	if (experienciaSeleccionada) {
 		if (document.getElementById("idFormCompra").reportValidity()) {
 			let nombreComprador = document.getElementById("idNombreComprador").value;
 			let mail = document.getElementById("idMail").value;
 			let compra = new Compra(nombreComprador, mail, experienciaSeleccionada);
 			sistema.cargarCompra(compra);
-			actualizarCompras();
 			filtrarCompras();
+			actualizarCompras();
 		}
 	}
 }
 
 function filtrarCompras() {
+
 	comprasAMostrar = [];
 	let categoriaSeleccionada = document.getElementById("idComboCategoriasIzquierda").value;
 	if (categoriaSeleccionada) {
-		for (let compra of sistema.compras) {
-			if (compra.experiencia.categoria.nombre === categoriaSeleccionada) {
+		for (let compra of sistema.obtenerCompras()) {
+			if (compra.experiencia.obtenerCategoria().nombre === categoriaSeleccionada) {
 				comprasAMostrar.push(compra);
 			}
 		}
@@ -363,6 +383,7 @@ function filtrarCompras() {
 }
 
 function actualizarCompras() {
+
 	experienciasMasCompradas = [];
 	calcularExpMasComprada();
 
@@ -381,18 +402,13 @@ function actualizarCompras() {
 	listaCompras.innerHTML = "";
 
 	if (comprasAMostrar.length > 0) {
+        
 		let categoriaSeleccionada = document.getElementById("idComboCategoriasIzquierda").value;
 		detallesCategoria.innerHTML = `Información detallada de la categoría ${categoriaSeleccionada}`;
 
 		for (let compra of comprasAMostrar) {
-			let fecha = new Date();
-			let yyyy = fecha.getFullYear();
-			let mm = fecha.getMonth() + 1;
-			let dd = fecha.getDate();
-			let compraInformacion = `Nombre: ${compra.nombreComprador} Mail: ${compra.mail}
-									 Fecha: ${dd}/${mm}/${yyyy} Hora: ${fecha.getHours()}:${fecha.getMinutes()}`;
 			let bulletCompra = document.createElement("li");
-			bulletCompra.innerHTML = compraInformacion;
+			bulletCompra.innerHTML = compra.toString();			
 			listaCompras.appendChild(bulletCompra);
 		}
 	}
